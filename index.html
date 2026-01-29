@@ -230,11 +230,11 @@
             });
         });
 
-        // Form submission
+        // Form submission - using hidden form method to bypass CORS
         const form = document.getElementById('klusForm');
         const successMessage = document.getElementById('successMessage');
 
-        form.addEventListener('submit', async (e) => {
+        form.addEventListener('submit', (e) => {
             e.preventDefault();
 
             if (!selectedChoice) {
@@ -257,40 +257,39 @@
 
             console.log('Data to send to n8n:', formData);
 
-            // n8n webhook URL
-            const n8nWebhookUrl = 'https://smart247chat.app.n8n.cloud/webhook/7f05783a-49f4-47d5-bd83-1de89c8b958b';
-
-            try {
-                const response = await fetch(n8nWebhookUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(formData)
-                });
-
-                if (response.ok) {
-                    // Show success message
-                    successMessage.classList.add('show');
-                    
-                    // Reset form
-                    form.reset();
-                    choiceBtns.forEach(b => b.classList.remove('active'));
-                    telefoonInput.classList.remove('show');
-                    emailInput.classList.remove('show');
-                    selectedChoice = null;
-
-                    // Hide success message after 3 seconds
-                    setTimeout(() => {
-                        successMessage.classList.remove('show');
-                    }, 3000);
-                } else {
-                    alert('Er is een fout opgetreden. Probeer het opnieuw.');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Kon geen verbinding maken met n8n. Check de webhook URL.');
+            // Create a hidden form to submit data
+            const hiddenForm = document.createElement('form');
+            hiddenForm.method = 'POST';
+            hiddenForm.action = 'https://smart247chat.app.n8n.cloud/webhook/7f05783a-49f4-47d5-bd83-1de89c8b958b';
+            hiddenForm.target = '_blank'; // Open in new tab so we can see response
+            
+            // Add form data as hidden inputs
+            for (const [key, value] of Object.entries(formData)) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = value;
+                hiddenForm.appendChild(input);
             }
+            
+            document.body.appendChild(hiddenForm);
+            hiddenForm.submit();
+            document.body.removeChild(hiddenForm);
+
+            // Show success message
+            successMessage.classList.add('show');
+            
+            // Reset form
+            form.reset();
+            choiceBtns.forEach(b => b.classList.remove('active'));
+            telefoonInput.classList.remove('show');
+            emailInput.classList.remove('show');
+            selectedChoice = null;
+
+            // Hide success message after 3 seconds
+            setTimeout(() => {
+                successMessage.classList.remove('show');
+            }, 3000);
         });
     </script>
 </body>
