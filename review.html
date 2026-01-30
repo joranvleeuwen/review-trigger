@@ -1,374 +1,368 @@
-            <!DOCTYPE html>
-<html lang="nl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deel je ervaring</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+          <!DOCTYPE html> 
+<html lang="nl"> 
+<head> 
+<meta charset="UTF-8"> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<title>Deel je ervaring</title> 
+<style> 
+* { 
+margin: 0; 
+padding: 0; 
+box-sizing: border-box; 
+} 
+body { 
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+background: #1a1a1a; 
+min-height: 100vh; 
+display: flex; 
+justify-content: center; 
+align-items: center; 
+padding: 20px; 
+} 
+.container { 
+background: #2a2a2a; 
+border: 1px solid #3a3a3a; 
+border-radius: 8px; 
+padding: 60px 50px; 
+max-width: 550px; 
+width: 100%; 
+text-align: center; 
+} 
+.logo { 
+display: none; 
+} 
+h1 { 
+color: #ffffff; 
+margin-bottom: 8px; 
+font-size: 28px; 
+font-weight: 600; 
+} 
+.subtitle { 
+color: #999; 
+margin-bottom: 50px; 
+font-size: 15px; 
+font-weight: 400; 
+} 
+/* Star Rating */ 
+.stars-container { 
+margin-bottom: 30px; 
+} 
+.stars { 
+display: flex; 
+justify-content: center; 
+gap: 20px; 
+font-size: 48px; 
+cursor: pointer; 
+} 
+.star { 
+transition: color 0.2s; 
+color: #444; 
+} 
+.star:hover, 
+.star.active { 
+color: #fff; 
+} 
+/* Feedback Section */ 
+.feedback-section { 
+display: none; 
+animation: fadeIn 0.5s; 
+} 
+.feedback-section.show { 
+display: block; 
+} 
+@keyframes fadeIn { 
+from { 
+opacity: 0; 
+transform: translateY(20px); 
+} 
+to { 
+opacity: 1; 
+transform: translateY(0); 
+} 
+} 
+.feedback-message { 
+background: #1a1a1a; 
+padding: 24px; 
+border-radius: 4px; 
+margin-bottom: 24px; 
+color: #ffffff; 
+border: 1px solid #3a3a3a; 
+} 
+.feedback-message h2 { 
+font-size: 20px; 
+font-weight: 600; 
+margin-bottom: 8px; 
+color: #ffffff; 
+} 
+.feedback-message p { 
+font-size: 15px; 
+color: #999; 
+} 
+textarea { 
+width: 100%; 
+padding: 15px; 
+border: 1px solid #3a3a3a; 
+background: #1a1a1a; 
+color: #ffffff; 
+border-radius: 4px; 
+font-size: 16px; 
+font-family: inherit; 
+min-height: 120px; 
+margin-bottom: 20px; 
+resize: vertical; 
+} 
+textarea:focus { 
+outline: none; 
+border-color: #555; 
+} 
+textarea::placeholder { 
+color: #666; 
+} 
+/* Video Section */ 
+.video-container { 
+margin: 30px 0; 
+border-radius: 15px; 
+overflow: hidden; 
+box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); 
+} 
+.video-placeholder { 
+background: #000; 
+padding: 100px 20px; 
+color: white; 
+font-size: 18px; 
+} 
+/* Discount Section */ 
+.discount-box { 
+background: #ffffff; 
+color: #1a1a1a; 
+padding: 24px; 
+border-radius: 4px; 
+margin: 30px 0; 
+} 
+.discount-box h3 { 
+font-size: 16px; 
+font-weight: 500; 
+margin-bottom: 12px; 
+} 
+.discount-code { 
+font-size: 28px; 
+font-weight: 600; 
+letter-spacing: 3px; 
+margin: 12px 0; 
+padding: 16px; 
+background: #1a1a1a; 
+color: #ffffff; 
+border-radius: 4px; 
+} 
+.discount-box p { 
+font-size: 14px; 
+opacity: 0.7; 
+} 
+/* Buttons */ 
+.btn { 
+width: 100%; 
+padding: 16px; 
+background: #ffffff; 
+color: #1a1a1a; 
+border: none; 
+border-radius: 4px; 
+font-size: 16px; 
+font-weight: 600; 
+cursor: pointer; 
+transition: background 0.2s; 
+margin-top: 20px; 
+} 
+.btn:hover { 
+background: #e0e0e0; 
+} 
+.btn:active { 
+background: #d0d0d0; 
+} 
+/* Thank You Screen */ 
+.thank-you { 
+display: none; 
+} 
+.thank-you.show { 
+display: block; 
+animation: fadeIn 0.5s; 
+} 
+.thank-you-icon { 
+font-size: 64px; 
+margin-bottom: 24px; 
+font-weight: 600; 
+color: #ffffff; 
+} 
+/* Hidden Rating Input */ 
+#ratingInput { 
+display: none; 
+} 
+</style> 
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: #1a1a1a;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
+<script>
+  const REVIEW_WEBHOOK = "https://smart247chat.app.n8n.cloud/webhook-test/JOUW_REVIEW_WEBHOOK_ID";
 
-        .container {
-            background: #2a2a2a;
-            border: 1px solid #3a3a3a;
-            border-radius: 8px;
-            padding: 60px 50px;
-            max-width: 550px;
-            width: 100%;
-            text-align: center;
-        }
+  const klus_id = new URLSearchParams(window.location.search).get("klus_id");
 
-        .logo {
-            display: none;
-        }
+  function sendReview(sterren, feedback) {
+    // hidden form submit (werkt cross-site)
+    const f = document.createElement("form");
+    f.method = "POST";
+    f.action = REVIEW_WEBHOOK;
+    f.target = "_blank";
 
-        h1 {
-            color: #ffffff;
-            margin-bottom: 8px;
-            font-size: 28px;
-            font-weight: 600;
-        }
+    const add = (name, value) => {
+      const i = document.createElement("input");
+      i.type = "hidden";
+      i.name = name;
+      i.value = value ?? "";
+      f.appendChild(i);
+    };
 
-        .subtitle {
-            color: #999;
-            margin-bottom: 50px;
-            font-size: 15px;
-            font-weight: 400;
-        }
+    add("klus_id", klus_id);
+    add("sterren", sterren);
+    add("feedback", feedback);
 
-        /* Star Rating */
-        .stars-container {
-            margin-bottom: 30px;
-        }
+    document.body.appendChild(f);
+    f.submit();
+    document.body.removeChild(f);
+  }
+</script>
+</head> 
+<body> 
+<div class="container"> 
+<!-- Initial Rating Screen --> 
+<div id="ratingScreen"> 
+<h1>Hoe was je ervaring?</h1> 
+<p class="subtitle">We horen graag wat je van ons vindt</p> 
+<div class="stars-container"> 
+<div class="stars" id="stars"> 
+<span class="star" data-rating="1">⭐</span> 
+<span class="star" data-rating="2">⭐</span> 
+<span class="star" data-rating="3">⭐</span> 
+<span class="star" data-rating="4">⭐</span> 
+<span class="star" data-rating="5">⭐</span> 
+</div> 
+</div> 
+</div> 
 
-        .stars {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            font-size: 48px;
-            cursor: pointer;
-        }
+<!-- Feedback Section (for <5 stars) --> 
+<div id="feedbackSection" class="feedback-section"> 
+<div class="feedback-message"> 
+<h2>Bedankt voor je eerlijkheid</h2> 
+<p>We willen graag weten hoe we beter kunnen worden</p> 
+</div> 
+<form id="feedbackForm"> 
+<textarea id="feedbackText" name="feedback" placeholder="Vertel ons wat we kunnen verbeteren..." required ></textarea> 
+<div class="video-container"> 
+<video controls style="width: 100%; border-radius: 8px;"> 
+<source src="bedrijfsvideo.mp4" type="video/mp4"> 
+Je browser ondersteunt geen video. 
+</video> 
+</div> 
+<div class="discount-box"> 
+<h3>Als dank voor je feedback</h3> 
+<div class="discount-code">FEEDBACK10</div> 
+<p>10% korting op je volgende aankoop</p> 
+</div> 
+<button type="submit" class="btn">Verstuur Feedback</button> 
+</form> 
+</div> 
 
-        .star {
-            transition: color 0.2s;
-            color: #444;
-        }
+<!-- Thank You Screen --> 
+<div id="thankYou" class="thank-you"> 
+<div class="thank-you-icon">✓</div> 
+<h1>Bedankt</h1> 
+<p class="subtitle">Je feedback helpt ons om beter te worden</p> 
+</div> 
+</div> 
 
-        .star:hover,
-        .star.active {
-            color: #fff;
-        }
+<script> 
+const stars = document.querySelectorAll('.star'); 
+const ratingScreen = document.getElementById('ratingScreen'); 
+const feedbackSection = document.getElementById('feedbackSection'); 
+const feedbackForm = document.getElementById('feedbackForm'); 
+const thankYou = document.getElementById('thankYou'); 
+let selectedRating = 0; 
 
-        /* Feedback Section */
-        .feedback-section {
-            display: none;
-            animation: fadeIn 0.5s;
-        }
+// Star hover effect 
+stars.forEach((star, index) => { 
+star.addEventListener('mouseenter', () => { 
+stars.forEach((s, i) => { 
+if (i <= index) { 
+s.classList.add('active'); 
+} else { 
+s.classList.remove('active'); 
+} 
+}); 
+}); 
 
-        .feedback-section.show {
-            display: block;
-        }
+star.addEventListener('mouseleave', () => { 
+stars.forEach((s, i) => { 
+if (i < selectedRating) { 
+s.classList.add('active'); 
+} else { 
+s.classList.remove('active'); 
+} 
+}); 
+}); 
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+// Star click 
+star.addEventListener('click', () => { 
+selectedRating = parseInt(star.dataset.rating); 
 
-        .feedback-message {
-            background: #1a1a1a;
-            padding: 24px;
-            border-radius: 4px;
-            margin-bottom: 24px;
-            color: #ffffff;
-            border: 1px solid #3a3a3a;
-        }
+// Activate stars 
+stars.forEach((s, i) => { 
+if (i < selectedRating) { 
+s.classList.add('active'); 
+} else { 
+s.classList.remove('active'); 
+} 
+}); 
 
-        .feedback-message h2 {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #ffffff;
-        }
+// Handle rating 
+if (selectedRating === 5) { 
+// 5 stars: redirect to Google Review 
+sendReview(selectedRating, "5 sterren review");
+window.location.href = 'https://google.com'; 
+} else { 
+// <5 stars: show feedback form 
+setTimeout(() => { 
+ratingScreen.style.display = 'none'; 
+feedbackSection.classList.add('show'); 
+}, 500); 
+} 
+}); 
+}); 
 
-        .feedback-message p {
-            font-size: 15px;
-            color: #999;
-        }
+// Feedback form submission 
+feedbackForm.addEventListener('submit', async (e) => { 
+e.preventDefault(); 
+const feedback = document.getElementById('feedbackText').value;
+    
+// Gebruik de sendReview functie
+sendReview(selectedRating, feedback);
 
-        textarea {
-            width: 100%;
-            padding: 15px;
-            border: 1px solid #3a3a3a;
-            background: #1a1a1a;
-            color: #ffffff;
-            border-radius: 4px;
-            font-size: 16px;
-            font-family: inherit;
-            min-height: 120px;
-            margin-bottom: 20px;
-            resize: vertical;
-        }
+const feedbackData = { 
+rating: selectedRating, 
+feedback: feedback, 
+timestamp: new Date().toISOString() 
+}; 
+console.log('Feedback data:', feedbackData); 
 
-        textarea:focus {
-            outline: none;
-            border-color: #555;
-        }
+// Send to n8n webhook 
+const webhookUrl = 'https://smart247chat.app.n8n.cloud/webhook-test/b381218c-c4ff-440e-8120-6aa897c2c82c'; 
+const response = await fetch(webhookUrl, { 
+method: 'POST', 
+headers: { 
+'Content-Type': 'application/json' 
+}, 
+body: JSON.stringify(feedbackData) 
+}); 
 
-        textarea::placeholder {
-            color: #666;
-        }
-
-        /* Video Section */
-        .video-container {
-            margin: 30px 0;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .video-placeholder {
-            background: #000;
-            padding: 100px 20px;
-            color: white;
-            font-size: 18px;
-        }
-
-        /* Discount Section */
-        .discount-box {
-            background: #ffffff;
-            color: #1a1a1a;
-            padding: 24px;
-            border-radius: 4px;
-            margin: 30px 0;
-        }
-
-        .discount-box h3 {
-            font-size: 16px;
-            font-weight: 500;
-            margin-bottom: 12px;
-        }
-
-        .discount-code {
-            font-size: 28px;
-            font-weight: 600;
-            letter-spacing: 3px;
-            margin: 12px 0;
-            padding: 16px;
-            background: #1a1a1a;
-            color: #ffffff;
-            border-radius: 4px;
-        }
-
-        .discount-box p {
-            font-size: 14px;
-            opacity: 0.7;
-        }
-
-        /* Buttons */
-        .btn {
-            width: 100%;
-            padding: 16px;
-            background: #ffffff;
-            color: #1a1a1a;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-            margin-top: 20px;
-        }
-
-        .btn:hover {
-            background: #e0e0e0;
-        }
-
-        .btn:active {
-            background: #d0d0d0;
-        }
-
-        /* Thank You Screen */
-        .thank-you {
-            display: none;
-        }
-
-        .thank-you.show {
-            display: block;
-            animation: fadeIn 0.5s;
-        }
-
-        .thank-you-icon {
-            font-size: 64px;
-            margin-bottom: 24px;
-            font-weight: 600;
-            color: #ffffff;
-        }
-
-        /* Hidden Rating Input */
-        #ratingInput {
-            display: none;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <!-- Initial Rating Screen -->
-        <div id="ratingScreen">
-            <h1>Hoe was je ervaring?</h1>
-            <p class="subtitle">We horen graag wat je van ons vindt</p>
-
-            <div class="stars-container">
-                <div class="stars" id="stars">
-                    <span class="star" data-rating="1">⭐</span>
-                    <span class="star" data-rating="2">⭐</span>
-                    <span class="star" data-rating="3">⭐</span>
-                    <span class="star" data-rating="4">⭐</span>
-                    <span class="star" data-rating="5">⭐</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Feedback Section (for <5 stars) -->
-        <div id="feedbackSection" class="feedback-section">
-            <div class="feedback-message">
-                <h2>Bedankt voor je eerlijkheid</h2>
-                <p>We willen graag weten hoe we beter kunnen worden</p>
-            </div>
-
-            <form id="feedbackForm">
-                <textarea 
-                    id="feedbackText" 
-                    name="feedback" 
-                    placeholder="Vertel ons wat we kunnen verbeteren..."
-                    required
-                ></textarea>
-
-               <div class="video-container">
-                        <video controls style="width: 100%; border-radius: 8px;">
-                        <source src="bedrijfsvideo.mp4" type="video/mp4">
-                        Je browser ondersteunt geen video.
-                    </video>
-                </div>
-                </div>
-
-                <div class="discount-box">
-                    <h3>Als dank voor je feedback</h3>
-                    <div class="discount-code">FEEDBACK10</div>
-                    <p>10% korting op je volgende aankoop</p>
-                </div>
-
-                <button type="submit" class="btn">Verstuur Feedback</button>
-            </form>
-        </div>
-
-        <!-- Thank You Screen -->
-        <div id="thankYou" class="thank-you">
-            <div class="thank-you-icon">✓</div>
-            <h1>Bedankt</h1>
-            <p class="subtitle">Je feedback helpt ons om beter te worden</p>
-        </div>
-    </div>
-
-    <script>
-        const stars = document.querySelectorAll('.star');
-        const ratingScreen = document.getElementById('ratingScreen');
-        const feedbackSection = document.getElementById('feedbackSection');
-        const feedbackForm = document.getElementById('feedbackForm');
-        const thankYou = document.getElementById('thankYou');
-        let selectedRating = 0;
-
-        // Star hover effect
-        stars.forEach((star, index) => {
-            star.addEventListener('mouseenter', () => {
-                stars.forEach((s, i) => {
-                    if (i <= index) {
-                        s.classList.add('active');
-                    } else {
-                        s.classList.remove('active');
-                    }
-                });
-            });
-
-            star.addEventListener('mouseleave', () => {
-                stars.forEach((s, i) => {
-                    if (i < selectedRating) {
-                        s.classList.add('active');
-                    } else {
-                        s.classList.remove('active');
-                    }
-                });
-            });
-
-            // Star click
-            star.addEventListener('click', () => {
-                selectedRating = parseInt(star.dataset.rating);
-                
-                // Activate stars
-                stars.forEach((s, i) => {
-                    if (i < selectedRating) {
-                        s.classList.add('active');
-                    } else {
-                        s.classList.remove('active');
-                    }
-                });
-
-                // Handle rating
-                if (selectedRating === 5) {
-                    // 5 stars: redirect to Google Review
-                    window.location.href = 'https://google.com';
-                } else {
-                    // <5 stars: show feedback form
-                    setTimeout(() => {
-                        ratingScreen.style.display = 'none';
-                        feedbackSection.classList.add('show');
-                    }, 500);
-                }
-            });
-        });
-
-        // Feedback form submission
-        feedbackForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const feedbackData = {
-                rating: selectedRating,
-                feedback: document.getElementById('feedbackText').value,
-                timestamp: new Date().toISOString()
-            };
-
-            console.log('Feedback data:', feedbackData);
-
-           // Send to n8n webhook
-        const webhookUrl = 'https://smart247chat.app.n8n.cloud/webhook-test/b381218c-c4ff-440e-8120-6aa897c2c82c';
-            const response = await fetch(webhookUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(feedbackData)
-            });
-
-            // Show thank you message
-            feedbackSection.style.display = 'none';
-            thankYou.classList.add('show');
-        });
-    </script>
-</body>
+// Show thank you message 
+feedbackSection.style.display = 'none'; 
+thankYou.classList.add('show'); 
+}); 
+</script> 
+</body> 
 </html>
