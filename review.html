@@ -347,7 +347,8 @@ sendReview(selectedRating, feedback);
 const feedbackData = {
     klus_id: klus_id,
     sterren: selectedRating,
-    feedback: document.getElementById('feedbackText').value
+    feedback: document.getElementById('feedbackText').value,
+    timestamp: new Date().toISOString()
 };
 
 console.log('Feedback data:', feedbackData); 
