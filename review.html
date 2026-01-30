@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+            <!DOCTYPE html>
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
@@ -357,13 +357,13 @@
 
             console.log('Feedback data:', feedbackData);
 
-            // TODO: Send to n8n webhook
-            // const webhookUrl = 'YOUR_FEEDBACK_WEBHOOK_URL';
-            // await fetch(webhookUrl, {
-            //     method: 'POST',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: JSON.stringify(feedbackData)
-            // });
+           // Send to n8n webhook
+        const webhookUrl = 'https://smart247chat.app.n8n.cloud/webhook-test/b381218c-c4ff-440e-8120-6aa897c2c82c';
+            const response = await fetch(webhookUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(feedbackData)
+            });
 
             // Show thank you message
             feedbackSection.style.display = 'none';
