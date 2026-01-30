@@ -283,6 +283,8 @@ const feedbackSection = document.getElementById('feedbackSection');
 const feedbackForm = document.getElementById('feedbackForm'); 
 const thankYou = document.getElementById('thankYou'); 
 let selectedRating = 0; 
+const klus_id = new URLSearchParams(window.location.search).get('klus_id');
+
 
 // Star hover effect 
 stars.forEach((star, index) => { 
@@ -342,11 +344,12 @@ const feedback = document.getElementById('feedbackText').value;
 // Gebruik de sendReview functie
 sendReview(selectedRating, feedback);
 
-const feedbackData = { 
-rating: selectedRating, 
-feedback: feedback, 
-timestamp: new Date().toISOString() 
-}; 
+const feedbackData = {
+    klus_id: klus_id,
+    sterren: selectedRating,
+    feedback: document.getElementById('feedbackText').value
+};
+
 console.log('Feedback data:', feedbackData); 
 
 // Send to n8n webhook 
